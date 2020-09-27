@@ -1,9 +1,26 @@
-const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const secret = 'super-strong-secret';
 
+/*
+const isValidToken = (token) => {
+    const decode = jwt.verify(token, secret, (err, decode) => {
+      if (err) {
+        return false;
+      };
+      return User.find({_id: decode.id})
+      .then((user) => {
+        if (user) {
+          return true;
+        } return false;
+      })
+    })
+}
+*/
 
 const getUsers = (req, res) => {
-  User.find({})
+
+    User.find({})
     .then((data) => res.status(200).send(data))
     .catch((error) => {
       if (error.message) {
@@ -12,6 +29,8 @@ const getUsers = (req, res) => {
       }
       res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
+    
+  
 };
 
 const getProfile = (req, res) => {
@@ -23,21 +42,6 @@ const getProfile = (req, res) => {
     .catch((error) => {
       if (error.message === 'NotValidId') {
         res.status(404).send({ message: 'Пользователя нет в базе' });
-      }
-      res.status(500).send({ message: 'На сервере произошла ошибка' });
-    });
-};
-
-const createProfile = (req, res) => {
-  const { name, about, avatar, email } = req.body;
-
-    bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, hash }))
-    .then((user) => res.status(200).send(user))
-    .catch((error) => {
-      if (error.message) {
-        res.status(400).send({ message: error.message });
-        return;
       }
       res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
@@ -81,6 +85,7 @@ const updateAvatarProfile = (req, res) => {
     });
 };
 
+
 module.exports = {
-  getUsers, getProfile, createProfile, updateProfile, updateAvatarProfile,
-};
+  getUsers, getProfile, updateProfile, updateAvatarProfile,
+}
