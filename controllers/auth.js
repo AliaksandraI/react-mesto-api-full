@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
 
   bcrypt.hash(req.body.password, 10)
@@ -14,16 +14,10 @@ module.exports.createUser = (req, res) => {
     .then((user) => {
       res.status(201).send({name: user.name, about: user.about,avatar: user.avatar,email: user.email});
     })
-    .catch((error) => {
-        if (error.message) {
-          res.status(400).send({ message: error.message });
-          return;
-        }
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      });
+    .catch(next);
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findOne({ email }).select('+password')
@@ -32,7 +26,5 @@ module.exports.login = (req, res) => {
         token: jwt.sign({ _id: user._id }, secret, { expiresIn: '7d' }),
       });
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };
