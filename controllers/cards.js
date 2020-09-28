@@ -28,12 +28,14 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.id)
+  const owner = req.user._id;
+ 
+    Card.findOneAndDelete({_id: req.params.id, owner})
     .then((data) => {
       if (data) {
         return res.status(200).send(data);
       }
-      return res.status(404).send({ message: 'Нет пользователя с таким id' });
+      return res.status(404).send({ message: 'Нет карточки с таким id либо она была создана не Вами' });
     })
     .catch((error) => {
       if (error.message) {
@@ -42,6 +44,8 @@ const deleteCard = (req, res) => {
       }
       res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
+  
+
 };
 
 const likeCard = (req, res) => {

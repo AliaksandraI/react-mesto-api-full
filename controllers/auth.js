@@ -12,7 +12,7 @@ module.exports.createUser = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => {
-      res.status(201).send({user});
+      res.status(201).send({name: user.name, about: user.about,avatar: user.avatar,email: user.email});
     })
     .catch((error) => {
         if (error.message) {
@@ -26,7 +26,7 @@ module.exports.createUser = (req, res) => {
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return User.findOne({ email }).select('+password')
     .then((user) => {
       res.send({
         token: jwt.sign({ _id: user._id }, secret, { expiresIn: '7d' }),
