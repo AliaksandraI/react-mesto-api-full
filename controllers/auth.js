@@ -7,7 +7,7 @@ const User = require('../models/user');
 
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email } = req.body;
+  const { name = 'Жак-Ив Кусто', about = 'Исследователь океана', avatar = 'https://i1.wp.com/ocean-media.su/wp-content/uploads/2015/06/3886_original.jpg', email } = req.body;
 
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
