@@ -1,6 +1,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config(); 
 const bodyParser = require('body-parser');
 const path = require('path');
 const notfoundRouter = require('./routes/notfound');
@@ -25,6 +26,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+}); 
 
 app.post('/signin',celebrate({
   body: Joi.object().keys({
