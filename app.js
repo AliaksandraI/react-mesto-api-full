@@ -30,20 +30,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(requestLogger);
 
-app.get('/crash-test', () => {
+app.get('/api/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 }); 
 
-app.post('/signin',celebrate({
+app.post('/api/signin',celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
     password: Joi.string().required().min(6),
   }).unknown(true),
 }), login);
 
-app.post('/signup', celebrate({
+app.post('/api/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -55,8 +55,8 @@ app.post('/signup', celebrate({
 
 app.use(auth);
 
-app.use('/users', require('./routes/users'));
-app.use('/cards', require('./routes/cards'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/cards', require('./routes/cards'));
 
 app.use('*', notfoundRouter);
 
