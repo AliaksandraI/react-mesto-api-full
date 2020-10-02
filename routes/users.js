@@ -3,12 +3,14 @@ const { celebrate, Joi } = require('celebrate');
 
 const router = express.Router();
 const {
-  getUsers, getProfile, updateProfile, updateAvatarProfile,
+  getUsers, getProfile, getMyProfile, updateProfile, updateAvatarProfile,
 } = require('../controllers/users');
 
 router.get('/', getUsers);
 
 router.get('/:id', getProfile);
+
+router.get('/me', getMyProfile);
 
 router.patch('/me', updateProfile);
 

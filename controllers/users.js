@@ -16,6 +16,16 @@ const getProfile = (req, res, next) => {
     .catch(next);
 };
 
+const getMyProfile = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(new Error('NotValidId'))
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch(next);
+};
+
+
 const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
 
@@ -44,5 +54,5 @@ const updateAvatarProfile = (req, res, next) => {
 
 
 module.exports = {
-  getUsers, getProfile, updateProfile, updateAvatarProfile,
+  getUsers, getProfile, getMyProfile, updateProfile, updateAvatarProfile,
 }
