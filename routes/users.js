@@ -8,9 +8,9 @@ const {
 
 router.get('/', getUsers);
 
-router.get('/:id', getProfile);
-
 router.get('/me', getMyProfile);
+
+router.get('/:id', getProfile);
 
 router.patch('/me', updateProfile);
 
