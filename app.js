@@ -12,9 +12,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
-const cors = require('cors');
+//const cors = require('cors');
 const app = express();
-app.use(cors({origin: true}));
+//app.use(cors({origin: true}));
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
