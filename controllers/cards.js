@@ -1,5 +1,6 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
+const OwnerError = require('../errors/owner-err');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -18,17 +19,18 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const owner = req.user._id;
- 
-    Card.findOneAndDelete({_id: req.params.id, owner})
-    .then((data) => {
-      if (data) {
-        return res.status(200).send(data);
-      }
-      throw new NotFoundError('Нет карточки с таким id');
-    })
-    .catch(next);
-  
 
+  if (owner === req.params.id) {
+    Card.findOneAndDelete({ _id: req.params.id, owner })
+      .then((data) => {
+        if (data) {
+          return res.status(200).send(data);
+        }
+        throw new NotFoundError('No card with that id');
+      })
+      .catch(next);
+  }
+  throw new OwnerError({ message: 'This card was added by another user' });
 };
 
 const likeCard = (req, res, next) => {

@@ -2,7 +2,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 
 const getUsers = (req, res, next) => {
-    User.find({})
+  User.find({})
     .then((data) => res.status(200).send(data))
     .catch(next);
 };
@@ -24,7 +24,6 @@ const getMyProfile = (req, res, next) => {
     })
     .catch(next);
 };
-
 
 const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
@@ -52,7 +51,6 @@ const updateAvatarProfile = (req, res, next) => {
     .catch(next);
 };
 
-
 module.exports = {
   getUsers, getProfile, getMyProfile, updateProfile, updateAvatarProfile,
-}
+};

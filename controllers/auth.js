@@ -1,24 +1,33 @@
 const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const User = require('../models/user');
-
-
+const EmailError = require('../errors/email-err');
 
 module.exports.createUser = (req, res, next) => {
-  const { name = 'Жак-Ив Кусто', about = 'Исследователь океана', avatar = 'https://i1.wp.com/ocean-media.su/wp-content/uploads/2015/06/3886_original.jpg', email } = req.body;
+  const {
+    name, about, avatar, email,
+  } = req.body;
 
   bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        throw new EmailError({ message: 'This email is already used' });
+      } else next(err);
+    })
     .then((user) => {
-      res.status(201).send({name: user.name, about: user.about,avatar: user.avatar,email: user.email});
+      res.status(201).send({
+        name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+      });
     })
     .catch(next);
 };
 
 module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
 
   return User.findOne({ email }).select('+password')
     .then((user) => {
