@@ -38,7 +38,7 @@ app.get('/api/crash-test', () => {
 
 app.post('/api/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/),
+    email: Joi.string().required().pattern(/^\w+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/),
     password: Joi.string().required().min(6),
   }).unknown(true),
 }), login);
@@ -48,7 +48,7 @@ app.post('/api/signup', celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/),
-    email: Joi.string().required().pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/),
+    email: Joi.string().required().pattern(/^\w+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/),
     password: Joi.string().required().min(6),
   }).unknown(true),
 }), createUser);
