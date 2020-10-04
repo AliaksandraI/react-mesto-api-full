@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator(email) {
-        const regEx = /^\w+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
+        const regEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         return regEx.test(email);
       },
       message: 'Invalid email',
